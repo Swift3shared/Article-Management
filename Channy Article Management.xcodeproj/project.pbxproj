@@ -1,0 +1,306 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B936C7741DFEF301001BBF88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936C7731DFEF301001BBF88 /* AppDelegate.swift */; };
+		B936C7761DFEF301001BBF88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936C7751DFEF301001BBF88 /* ViewController.swift */; };
+		B936C7791DFEF301001BBF88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B936C7771DFEF301001BBF88 /* Main.storyboard */; };
+		B936C77B1DFEF301001BBF88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B936C77A1DFEF301001BBF88 /* Assets.xcassets */; };
+		B936C77E1DFEF301001BBF88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B936C77C1DFEF301001BBF88 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B936C7701DFEF301001BBF88 /* Channy Article Management.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channy Article Management.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B936C7731DFEF301001BBF88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B936C7751DFEF301001BBF88 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B936C7781DFEF301001BBF88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B936C77A1DFEF301001BBF88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B936C77D1DFEF301001BBF88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B936C77F1DFEF301001BBF88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B936C76D1DFEF301001BBF88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B936C7671DFEF301001BBF88 = {
+			isa = PBXGroup;
+			children = (
+				B936C7721DFEF301001BBF88 /* Channy Article Management */,
+				B936C7711DFEF301001BBF88 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B936C7711DFEF301001BBF88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B936C7701DFEF301001BBF88 /* Channy Article Management.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B936C7721DFEF301001BBF88 /* Channy Article Management */ = {
+			isa = PBXGroup;
+			children = (
+				B936C7731DFEF301001BBF88 /* AppDelegate.swift */,
+				B936C7751DFEF301001BBF88 /* ViewController.swift */,
+				B936C7771DFEF301001BBF88 /* Main.storyboard */,
+				B936C77A1DFEF301001BBF88 /* Assets.xcassets */,
+				B936C77C1DFEF301001BBF88 /* LaunchScreen.storyboard */,
+				B936C77F1DFEF301001BBF88 /* Info.plist */,
+			);
+			path = "Channy Article Management";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B936C76F1DFEF301001BBF88 /* Channy Article Management */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B936C7821DFEF301001BBF88 /* Build configuration list for PBXNativeTarget "Channy Article Management" */;
+			buildPhases = (
+				B936C76C1DFEF301001BBF88 /* Sources */,
+				B936C76D1DFEF301001BBF88 /* Frameworks */,
+				B936C76E1DFEF301001BBF88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Channy Article Management";
+			productName = "Channy Article Management";
+			productReference = B936C7701DFEF301001BBF88 /* Channy Article Management.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B936C7681DFEF301001BBF88 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0810;
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = "channy-origin";
+				TargetAttributes = {
+					B936C76F1DFEF301001BBF88 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = B936C76B1DFEF301001BBF88 /* Build configuration list for PBXProject "Channy Article Management" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B936C7671DFEF301001BBF88;
+			productRefGroup = B936C7711DFEF301001BBF88 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B936C76F1DFEF301001BBF88 /* Channy Article Management */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B936C76E1DFEF301001BBF88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B936C77E1DFEF301001BBF88 /* LaunchScreen.storyboard in Resources */,
+				B936C77B1DFEF301001BBF88 /* Assets.xcassets in Resources */,
+				B936C7791DFEF301001BBF88 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B936C76C1DFEF301001BBF88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B936C7761DFEF301001BBF88 /* ViewController.swift in Sources */,
+				B936C7741DFEF301001BBF88 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		B936C7771DFEF301001BBF88 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B936C7781DFEF301001BBF88 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B936C77C1DFEF301001BBF88 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B936C77D1DFEF301001BBF88 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B936C7801DFEF301001BBF88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B936C7811DFEF301001BBF88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B936C7831DFEF301001BBF88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Channy Article Management/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.channy.origin.Channy-Article-Management";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		B936C7841DFEF301001BBF88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Channy Article Management/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.channy.origin.Channy-Article-Management";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B936C76B1DFEF301001BBF88 /* Build configuration list for PBXProject "Channy Article Management" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B936C7801DFEF301001BBF88 /* Debug */,
+				B936C7811DFEF301001BBF88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B936C7821DFEF301001BBF88 /* Build configuration list for PBXNativeTarget "Channy Article Management" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B936C7831DFEF301001BBF88 /* Debug */,
+				B936C7841DFEF301001BBF88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B936C7681DFEF301001BBF88 /* Project object */;
+}
