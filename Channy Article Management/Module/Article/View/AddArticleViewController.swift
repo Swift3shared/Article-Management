@@ -13,6 +13,8 @@ class AddArticleViewController: UIViewController {
     // initialize components
     var titleTextField : UITextField?
     var descriptionTextView : UITextView?
+    var saveButton : UIButton?
+    var articleImage : UIImageView?
 
     override init(nibName name: String?, bundle: Bundle?) {
         super.init(nibName: name, bundle: bundle)
@@ -35,17 +37,27 @@ class AddArticleViewController: UIViewController {
         let screenHieght = UIScreen.main.bounds.height
         let screenWidth = UIScreen.main.bounds.width
         
-        titleTextField = ArticleUITextField(frame: CGRect(x: 20, y: screenHieght - (screenHieght - (100)), width: screenWidth - 40, height: 40), "Title")
+        articleImage = UIImageView(frame : CGRect(x: 20, y: 80, width: screenWidth - 40 , height: screenHieght / 2 - 100 ))
+        articleImage?.image = #imageLiteral(resourceName: "testImage")
         
-        descriptionTextView = ArticleUITextView(frame: CGRect(x: 20, y: screenHieght - (screenHieght - (150)), width: screenWidth - 40, height: 70))
+        
+        titleTextField = ArticleUITextField(frame: CGRect(x: 20, y: screenHieght / 2 + 10 , width: screenWidth - 40, height: 40), "Title")
+        
+        descriptionTextView = ArticleUITextView(frame: CGRect(x: 20, y: screenHieght / 2 + 70, width: screenWidth - 40, height: 70))
         
         descriptionTextView?.text = "Description"
         descriptionTextView?.textColor = UIColor.lightGray
         
+        saveButton = UIButton(frame : CGRect(x: (screenWidth / 2) - 50, y: screenHieght - 100 , width: 100, height: 50))
+        saveButton?.titleLabel?.text = "Save"
+        saveButton?.titleLabel?.textColor = UIColor.blue
+        saveButton?.layer.borderWidth = 1
+        saveButton?.layer.borderColor = UIColor.blue.cgColor
+        
+        self.view.addSubview(articleImage!)
         self.view.addSubview(titleTextField!)
         self.view.addSubview(descriptionTextView!)
-        
-        //self.view.addSubview(descriptionTextField!)
+        self.view.addSubview(saveButton!)
         
     }
 

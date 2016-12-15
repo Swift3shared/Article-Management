@@ -148,7 +148,7 @@ extension ArticleListViewController{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = Bundle.main.loadNibNamed("ArticleCell", owner: self, options: nil)?.first as! ArticleCell
         cell.titleLabel.text = articles[indexPath.row].title
-        cell.descriptionLabel.text = articles[indexPath.row].description
+        cell.descriptionLabel.text = articles[indexPath.row].articleDescription
         
         if indexPath.row == articles.count - 1{
             articleListPresenter?.getArticle(page! , numberOfRow)

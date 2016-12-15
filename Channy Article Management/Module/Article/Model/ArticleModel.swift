@@ -61,25 +61,8 @@ class ArticleModel{
                 let dictionaryData = dictionary["DATA"] as! [AnyObject]
                 articles = Array<Article>()
                 for value in dictionaryData {
-                    
                     let article = Article()
-                    
-                    if let id = value["ID"] {
-                        article.id = id as? Int
-                    }
-                    
-                    if let title = value["TITLE"] {
-                        article.title = title as? String
-                    }
-                    
-                    if let description = value["DESCRIPTION"] {
-                        article.articleDescription = description as? String
-                    }
-                    
-                    if let image = value["IMAGE"] {
-                        article.image = image as? String
-                    }
-                    
+                    article.map(value as! [String : AnyObject])
                     articles?.insert(article, at: 0)
                 }
             }
