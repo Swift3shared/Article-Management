@@ -14,10 +14,6 @@ class ArticleListViewController: UITableViewController {
     var articles:Array<Article> = []
     var articlePresenter:ArticlePresenter?
     
-    // page number
-    fileprivate var page:Int?
-    fileprivate let numberOfRow:Int = 10
-    
     // empty View and activity indicator
     var emptyView:UIView?
     var activityIndicator:UIActivityIndicatorView?
@@ -30,13 +26,13 @@ class ArticleListViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addArticlePressed))
         
         // make the empty view become full screen
-        emptyView = UIView(frame: UIScreen.main.bounds)
-        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: (emptyView?.frame.width)!/2,y: (emptyView?.frame.height)!/2, width: 15, height: 15))
+        //emptyView = UIView(frame: UIScreen.main.bounds)
+        //activityIndicator = UIActivityIndicatorView(frame: CGRect(x: (emptyView?.frame.width)!/2,y: (emptyView?.frame.height)!/2, width: 15, height: 15))
         
-        emptyView!.backgroundColor = UIColor.brown
-        emptyView!.addSubview(activityIndicator!)
+        //emptyView!.backgroundColor = UIColor.brown
+        //emptyView!.addSubview(activityIndicator!)
         
-        self.view.addSubview(emptyView!)
+        //self.view.addSubview(emptyView!)
        
     }
     
@@ -50,8 +46,18 @@ class ArticleListViewController: UITableViewController {
         
         articlePresenter = ArticlePresenter()
         articlePresenter?.attachToDelegate = self
-        page = 1
-        articlePresenter?.getArticle(page!, numberOfRow)
+        articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
+        
+        self.refreshControl?.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        
+        self.refreshControl = UIRefreshControl(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 40))
+        self.refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        self.tableView.addSubview(self.refreshControl!)
+        
+        //self.tableView.tableFooterView.en
+        let uiView = UIView(frame:CGRect(x: 20, y: 0, width: 20, height: 50))
+        uiView.backgroundColor = UIColor.blue
+        self.tableView.tableFooterView?.addSubview(uiView)
         
     }
     
@@ -60,6 +66,25 @@ class ArticleListViewController: UITableViewController {
         articleDetailViewController.artileListViewController = self
         navigationController?.pushViewController(articleDetailViewController, animated: true)
     }
+    
+    
+    func handleRefresh(_ refreshControl: UIRefreshControl) {
+        PAGE_NUMBER = 1
+        articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
+    }
+    
+    
+    
+    func updateArticle(atIndexParth indexPath: IndexPath, article : Article) {
+        articles[indexPath.row].title = article.title
+        articles[indexPath.row].articleDescription = article.articleDescription
+        articles[indexPath.row].image = article.image
+        
+        self.tableView.reloadData()
+        
+        print("Updated ")
+    }
+    
 }
 
 ////////////////////
@@ -69,16 +94,19 @@ extension ArticleListViewController : ArticlePresenterDelegate{
     
     func setStartLoading() {
         // make activity spinning
-        tableView.isHidden = false
-        emptyView?.isHidden = false
-        activityIndicator?.isHidden = false
-        activityIndicator?.startAnimating()
+        //tableView.isHidden = false
+        //emptyView?.isHidden = false
+        //activityIndicator?.isHidden = false
+        //activityIndicator?.startAnimating()
+        print("Try to refresh")
+        self.tableView.refreshControl?.beginRefreshing()
     }
     
     func setFinishLoading() {
-        tableView.isHidden = false
-        emptyView?.isHidden = true
-        activityIndicator?.stopAnimating()
+        self.refreshControl?.endRefreshing()
+        //tableView.isHidden = false
+        //emptyView?.isHidden = true
+        //activityIndicator?.stopAnimating()
     }
     
     func setArticleList(_ articles: Array<Article>) {
@@ -115,9 +143,11 @@ extension ArticleListViewController : ArticlePresenterDelegate{
         
     }
     
-    func setDeleteCompleted(_ index : Int) {
-        articles.remove(at: index)
-        tableView.reloadData()
+    func setDeleteCompleted(atIndexPath indextPath : IndexPath) {
+       print(indextPath.row)
+       articles.remove(at: indextPath.row)
+        //self.tableView.deleteRows(at: [indextPath], with: .fade)
+        self.tableView.reloadData()
     }
     
     // loading
@@ -144,14 +174,19 @@ extension ArticleListViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = Bundle.main.loadNibNamed("ArticleCell", owner: self, options: nil)?.first as! ArticleCell
-        cell.titleLabel.text = articles[indexPath.row].title
-        cell.descriptionLabel.text = articles[indexPath.row].articleDescription
-        
-        if indexPath.row == articles.count - 1{
-            articlePresenter?.getArticle(page! , numberOfRow)
-        }
+        let cell = Bundle.main.loadNibNamed("ArticleCell", owner: self, options: nil)?.first as! ArticleCell        
+        cell.configuration(articles[indexPath.row])
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row >= articles.count - 1 {
+           // articlePresenter?.getArticle(PAGE_NUMBER , NUMBER_OF_REROCE)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        print("Footer")
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -166,18 +201,44 @@ extension ArticleListViewController{
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:{
             action, indexpath in
-            self.articlePresenter?.deleteArticle(aritcleId: self.articles[indexPath.row].id!, index: indexPath.row)
+            self.articlePresenter?.deleteArticle(aritcleId: self.articles[indexPath.row].id!, atIndexPath: indexPath)
         });
         let EditRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Edit", handler:{
             action, indexpath in
             
             let articleDetailViewController = ArticleDetailViewController(nibName: nil, bundle: nil)
-            articleDetailViewController.articleToUpdate = articles[indexPath.row]
-            _
+            articleDetailViewController.articleToUpdate = self.articles[indexPath.row]
+            
+            articleDetailViewController.artileListViewController = self
+            
+            articleDetailViewController.indexPathToUpdate = indexPath
+            
+            _ = self.navigationController?.pushViewController( articleDetailViewController, animated: true)
             
         });
         deleteRowAction.backgroundColor = UIColor.brown
         return [deleteRowAction,EditRowAction]
     }
+    
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        print("Footer add")
+        print(section)
+        if section == 1{
+            print("Sec 1")
+            let tableViewHeader = UITableViewHeaderFooterView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 40))
+            tableViewHeader.backgroundColor = UIColor.blue
+            
+            return tableViewHeader
+        }
+        return nil
+    }
+    
+    override func tableView( _ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 50.0
+    }
 }
 
+extension ArticleListViewController{
+    
+   
+}

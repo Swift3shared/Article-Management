@@ -13,7 +13,7 @@ class ImageToMultiPartFormData{
     /////////////////////////////////////////////////////////////
     /// Trnsform image to Multipart form data for single image //
     /////////////////////////////////////////////////////////////
-    func getBody(_ paramater : String, _ fileName : String, _ image : UIImage, _ boundary : String) -> Data {
+    class func getBody(_ paramater : String, _ fileName : String, _ image : UIImage, _ boundary : String) -> Data {
         
         let body = NSMutableData()
         let data = UIImageJPEGRepresentation(image,1);
@@ -29,7 +29,7 @@ class ImageToMultiPartFormData{
     }
     
     
-    func createBody(parameters: NSMutableDictionary?,boundary: String) -> NSData {
+    class func createBody(parameters: NSMutableDictionary?,boundary: String) -> NSData {
         let body = NSMutableData()
         
         if parameters != nil {
@@ -55,7 +55,7 @@ class ImageToMultiPartFormData{
         return body
     }
     
-    func generateBoundaryString() -> String {
+    class func generateBoundaryString() -> String {
         return "Boundary-\(NSUUID().uuidString)"
     }
 

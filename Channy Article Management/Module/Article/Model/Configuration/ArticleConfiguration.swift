@@ -8,6 +8,9 @@
 
 import Foundation
 
+let NUMBER_OF_REROCE = 15
+var PAGE_NUMBER = 1
+var TOTALE_PAGE = 1
 
 ///////////////////////
 //   Header Field   ///
@@ -33,6 +36,10 @@ let deleteHeaderField : [ String : String ] = [
     "Accept":"*/*"
 ]
 
+func uploadHeaderField(_ boundary : String ) -> [ String : String ]{
+    return ["Authorization":"Basic QU1TQVBJQURNSU46QU1TQVBJUEBTU1dPUkQ=",
+    "Content-Type" : "multipart/form-data; boundary=\(boundary)"]
+}
 /////////////////////////
 //  URL                //
 /////////////////////////
@@ -40,12 +47,14 @@ let URL_GET_ARTICLE = "http://120.136.24.174:1301/v1/api/articles?" // + page an
 let URL_CREATE_ARTICLE = "http://120.136.24.174:1301/v1/api/articles"
 let URL_UPDATE_ARTICLE = "http://120.136.24.174:1301/v1/api/articles/" // + article id
 let URL_DELETE_ARTICLE = "http://120.136.24.174:1301/v1/api/articles/" // + article id
+let URL_UPLOAD_SINGLE_IMAGE = "http://120.136.24.174:1301/v1/api/uploadfile/single"
 
 //////////////////////////
 //     Typealias        //
 //////////////////////////
 typealias CompletionHandler = (Array<Article>?) -> ()
 typealias SuccessHandler = () -> ()
+typealias SuccessHandlerWithString = (String) -> ()
 typealias ErrorHandler = () -> ()
 
 
@@ -55,12 +64,12 @@ typealias ErrorHandler = () -> ()
 
 func createArticleParamater(_ article : Article) -> AnyObject {
     return [
-        "TITLE": "\(article.title)",
-        "DESCRIPTION": "\(article.articleDescription)",
+        "TITLE": "\(article.title!)",
+        "DESCRIPTION": "\(article.articleDescription!)",
         "AUTHOR": 0,
         "CATEGORY_ID": 0,
         "STATUS": "string",
-        "IMAGE": "string"
+        "IMAGE": article.image!
         ] as AnyObject
 }
 

@@ -29,10 +29,10 @@ import Foundation
     @objc optional func setCreateFailed()
     
     // Delete
-    @objc optional func setDeleteCompleted(_ index:Int)
+    @objc optional func setDeleteCompleted(atIndexPath indextPath : IndexPath)
     @objc optional func setDeleteFailed(_ index:Int)
     
     // Upldate
-    @objc optional func setUpdateCompleted()
+    @objc optional func setUpdateCompleted(_ article : Article)
     @objc optional func setUpdateFailed()
 }

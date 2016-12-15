@@ -13,6 +13,7 @@ class ArticleCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var articleImageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -20,5 +21,17 @@ class ArticleCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
+    func configuration(_ article : Article) {
+        titleLabel.text = article.title
+        descriptionLabel.text = article.articleDescription
+        do {
+            let url = URL(string: article.image!)
+            let data = try Data(contentsOf: url!)
+            articleImageView.image = UIImage(data: data)
+        }catch {}
+    }
+    
+    
     
 }

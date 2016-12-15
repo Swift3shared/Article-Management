@@ -6,7 +6,7 @@
 //  Copyright © 2016 channy-origin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class ArticlePresenter {
     
@@ -26,9 +26,9 @@ class ArticlePresenter {
     ///////////////////
     //   Create     ///
     ///////////////////
-    func create(_ article : Article) {
+    func create(_ article : Article, _ image : UIImage ) {
         delegate?.startLoading!()
-        articleModel?.create(article, success: {
+        articleModel?.create(article, image, success: {
             self.delegate?.finishLoading!()
             self.delegate?.setCreateCompleted!(article)
         }, error: {
@@ -74,14 +74,14 @@ class ArticlePresenter {
     /// Delete   ////
     ///////////////
     /////////////////
-    func deleteArticle(aritcleId:Int, index:Int) {
+    func deleteArticle(aritcleId:Int, atIndexPath indextPath : IndexPath) {
         delegate?.startLoading!()
         articleModel?.delete(aritcleId, success: {
             self.delegate?.finishLoading!()
-            self.delegate?.setDeleteCompleted!(index)
+            self.delegate?.setDeleteCompleted!(atIndexPath: indextPath)
         }, error: {
             self.delegate?.finishLoading!()
-            self.delegate?.setDeleteFailed!(index)
+            self.delegate?.setDeleteFailed!(indextPath.row)
         })
     }
     
@@ -94,7 +94,7 @@ class ArticlePresenter {
         delegate?.startLoading!()
         articleModel?.update(article, success: {
             self.delegate?.finishLoading!()
-            self.delegate?.setUpdateCompleted!()
+            self.delegate?.setUpdateCompleted!(article)
         }, error: {
             self.delegate?.setUpdateFailed!()
         })

@@ -8,14 +8,18 @@
 
 import UIKit
 
-class ArticleDetailViewController: UIViewController {
+class ArticleDetailViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    var imagePicker:UIImagePickerController?
     
     var titleTextField : UITextField?
     var descriptionTextView : UITextView?
-    var saveButton : UIButton?
+    var galaryButton : UIButton?
     var articleImage : UIImageView?
+    var imagView : UIImage!
     
     var articleToUpdate : Article?
+    var indexPathToUpdate : IndexPath?
     
     var artileListViewController:ArticleListViewController?
     
@@ -37,6 +41,10 @@ class ArticleDetailViewController: UIViewController {
         
         articlePresenter = ArticlePresenter()
         articlePresenter?.attachToDelegate = self
+        
+        imagePicker = UIImagePickerController()
+        imagePicker?.delegate = self
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,8 +52,36 @@ class ArticleDetailViewController: UIViewController {
     }
     
     func doneButtonPressed(_ sender : UIButton){
-        let article = Article(id: 0, title: (titleTextField?.text)!, description: (descriptionTextView?.text)!, image: "Not avaliable")
-        articlePresenter?.create(article)
+        if articleToUpdate == nil {
+            let article = Article(id: 0, title: (titleTextField?.text!)!, description: (descriptionTextView?.text!)!, image: "Not avaliable")
+            articlePresenter?.create(article, imagView)
+        } else {
+            self.articleToUpdate?.title = titleTextField?.text!
+            self.articleToUpdate?.articleDescription = descriptionTextView?.text!
+            self.articlePresenter?.update(self.articleToUpdate!)
+        }
+        
+    }
+    
+    func openGallary()
+    {
+        imagePicker?.allowsEditing = false
+        imagePicker?.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        present(imagePicker!, animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let img = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            print("reac")
+            self.imagView = img
+            self.articleImage!.image = self.imagView
+        }
+        imagePicker?.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -70,6 +106,10 @@ extension ArticleDetailViewController : ArticlePresenterDelegate {
         print("Create failed")
     }
     
+    func setUpdateCompleted(_ article: Article) {
+        self.artileListViewController?.updateArticle(atIndexParth: indexPathToUpdate!, article: article)
+    }
+    
 }
 
 /////////////////////////////////////////////
@@ -83,7 +123,6 @@ extension ArticleDetailViewController{
         let screenWidth = UIScreen.main.bounds.width
         
         articleImage = UIImageView(frame : CGRect(x: 20, y: 80, width: screenWidth - 40 , height: screenHieght / 2 - 100 ))
-        articleImage?.image = #imageLiteral(resourceName: "testImage")
         
         
         titleTextField = ArticleUITextField(frame: CGRect(x: 20, y: screenHieght / 2 + 10 , width: screenWidth - 40, height: 40), "Title")
@@ -93,19 +132,32 @@ extension ArticleDetailViewController{
         descriptionTextView?.text = "Description"
         descriptionTextView?.textColor = UIColor.lightGray
         
-        saveButton = UIButton(frame : CGRect(x: (screenWidth / 2) - 50, y: screenHieght - 100 , width: 100, height: 50))
-        saveButton?.titleLabel?.text = "Save"
-        saveButton?.titleLabel?.textColor = UIColor.blue
-        saveButton?.layer.borderWidth = 1
-        saveButton?.layer.borderColor = UIColor.blue.cgColor
+        galaryButton = UIButton(frame : CGRect(x: (screenWidth / 2) - 50, y: screenHieght - 100 , width: 100, height: 50))
+        galaryButton?.titleLabel?.text = "Save"
+        galaryButton?.titleLabel?.textColor = UIColor.blue
+        galaryButton?.layer.borderWidth = 1
+        galaryButton?.layer.borderColor = UIColor.blue.cgColor
         
         titleTextField?.delegate = self
         descriptionTextView?.delegate = self
         
         self.view.addSubview(articleImage!)
+        self.view.addSubview(galaryButton!)
         self.view.addSubview(titleTextField!)
         self.view.addSubview(descriptionTextView!)
         
+        if articleToUpdate != nil {
+            titleTextField?.text = articleToUpdate?.title
+            descriptionTextView?.text = articleToUpdate?.articleDescription
+            
+            do {
+                let url = URL(string: (articleToUpdate?.image)!)
+                let data = try Data(contentsOf: url!)
+                articleImage?.image = UIImage(data: data)
+            }catch {}
+        }
+        
+        galaryButton?.addTarget(self, action: #selector(openGallary), for: .touchDown)
     }
 }
 
