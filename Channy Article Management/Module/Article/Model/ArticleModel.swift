@@ -30,10 +30,14 @@ class ArticleModel{
         httpRequest.httpBody = dataParamater
         let session = URLSession.shared
         
+        print("reach")
+        
         session.dataTask(with: httpRequest){
             responseBody, response, errorResponse in
                 let httpResponse = response as! HTTPURLResponse
-            if httpResponse.statusCode == 201 {
+            print("****** \(httpResponse.statusCode)")
+            
+            if httpResponse.statusCode == 200 {
                 success()
             }else{
                 error()
@@ -63,7 +67,7 @@ class ArticleModel{
                 for value in dictionaryData {
                     let article = Article()
                     article.map(value as! [String : AnyObject])
-                    articles?.insert(article, at: 0)
+                    articles?.append(article)
                 }
             }
             completionHandler(articles)

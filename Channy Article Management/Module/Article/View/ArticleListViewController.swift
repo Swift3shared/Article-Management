@@ -12,7 +12,8 @@ import UIKit
 class ArticleListViewController: UITableViewController {
     
     var articles:Array<Article> = []
-    var articleListPresenter:ArticleListPresenter?
+    var articlePresenter:ArticlePresenter?
+    
     // page number
     fileprivate var page:Int?
     fileprivate let numberOfRow:Int = 10
@@ -26,7 +27,7 @@ class ArticleListViewController: UITableViewController {
 
         navigationItem.title = "Article"
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ArticleListViewController.addArticlePressed))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addArticlePressed))
         
         // make the empty view become full screen
         emptyView = UIView(frame: UIScreen.main.bounds)
@@ -47,23 +48,24 @@ class ArticleListViewController: UITableViewController {
         super.viewDidLoad()
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         
-        articleListPresenter = ArticleListPresenter()
-        articleListPresenter?.attachToDelegate = self
+        articlePresenter = ArticlePresenter()
+        articlePresenter?.attachToDelegate = self
         page = 1
-        articleListPresenter?.getArticle(page!, numberOfRow)
+        articlePresenter?.getArticle(page!, numberOfRow)
         
     }
     
     func addArticlePressed(){
-        navigationController?.pushViewController(AddArticleViewController(nibName: nil, bundle: nil), animated: true)
+        let articleDetailViewController = ArticleDetailViewController(nibName: nil, bundle: nil)
+        articleDetailViewController.artileListViewController = self
+        navigationController?.pushViewController(articleDetailViewController, animated: true)
     }
 }
 
 ////////////////////
 // DELEGAGE  ///////
 ////////////////////
-
-extension ArticleListViewController:ArticleListPresenterDelegate{
+extension ArticleListViewController : ArticlePresenterDelegate{
     
     func setStartLoading() {
         // make activity spinning
@@ -95,6 +97,11 @@ extension ArticleListViewController:ArticleListPresenterDelegate{
     func reloadArticleListTable() {
         tableView.reloadData()
     }
+    /** Create     **/
+    func setCreateCompleted(_ article: Article) {
+        self.articles.insert(article, at: 0)
+        tableView.reloadData()
+    }
     
     /** pagination **/
     func updateArticleList(_ articles: Array<Article>) {
@@ -111,15 +118,6 @@ extension ArticleListViewController:ArticleListPresenterDelegate{
     func setDeleteCompleted(_ index : Int) {
         articles.remove(at: index)
         tableView.reloadData()
-    }
-    
-    // Update
-    func setUpdateFailed() {
-        
-    }
-    
-    func setUpdateCompleted() {
-        
     }
     
     // loading
@@ -151,7 +149,7 @@ extension ArticleListViewController{
         cell.descriptionLabel.text = articles[indexPath.row].articleDescription
         
         if indexPath.row == articles.count - 1{
-            articleListPresenter?.getArticle(page! , numberOfRow)
+            articlePresenter?.getArticle(page! , numberOfRow)
         }
         return cell
     }
@@ -168,10 +166,14 @@ extension ArticleListViewController{
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:{
             action, indexpath in
-            self.articleListPresenter?.deleteArticle(aritcleId: self.articles[indexPath.row].id!, index: indexPath.row)
+            self.articlePresenter?.deleteArticle(aritcleId: self.articles[indexPath.row].id!, index: indexPath.row)
         });
         let EditRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Edit", handler:{
             action, indexpath in
+            
+            let articleDetailViewController = ArticleDetailViewController(nibName: nil, bundle: nil)
+            articleDetailViewController.articleToUpdate = articles[indexPath.row]
+            _
             
         });
         deleteRowAction.backgroundColor = UIColor.brown

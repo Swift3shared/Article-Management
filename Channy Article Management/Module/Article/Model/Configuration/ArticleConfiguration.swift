@@ -13,7 +13,7 @@ import Foundation
 //   Header Field   ///
 ///////////////////////
 let createHeaderField : [ String : String ] = [
-    "Content-Type": "application/json","Accept": "*/*", "Authorization":
+    "Content-Type": "application/json", "Accept": "*/*", "Authorization":
     "Basic QU1TQVBJQURNSU46QU1TQVBJUEBTU1dPUkQ="
 ]
 

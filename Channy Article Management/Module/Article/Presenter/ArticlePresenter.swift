@@ -1,5 +1,5 @@
 //
-//  ArticleListPresenter.swift
+//  ArticlePresenter.swift
 //  Channy Article Management
 //
 //  Created by sok channy on 12/12/16.
@@ -8,32 +8,39 @@
 
 import Foundation
 
-class ArticleListPresenter {
+class ArticlePresenter {
     
-    weak fileprivate var delegate:ArticleListPresenterDelegate?
+    weak fileprivate var delegate:ArticlePresenterDelegate?
     fileprivate var articleModel:ArticleModel?
     
-    var attachToDelegate:ArticleListPresenterDelegate? = nil{
+    init() {
+        articleModel = ArticleModel()
+    }
+    
+    var attachToDelegate:ArticlePresenterDelegate? = nil{
         didSet{
             delegate = attachToDelegate
         }
     }
     
-    
     ///////////////////
     //   Create     ///
     ///////////////////
     func create(_ article : Article) {
-        
+        delegate?.startLoading!()
+        articleModel?.create(article, success: {
+            self.delegate?.finishLoading!()
+            self.delegate?.setCreateCompleted!(article)
+        }, error: {
+            self.delegate?.finishLoading!()
+            self.delegate?.setCreateFailed!()
+        })
     }
     
     ///////////////////
     // Get Article  ///
     ///////////////////
     func getArticle(_ page:Int,_ numberOfRow:Int){
-        
-        articleModel = ArticleModel()
-        
         
         if page > 1 {
             self.delegate?.startLoading!()
@@ -84,34 +91,14 @@ class ArticleListPresenter {
     
     func update(_ article:Article) {
         
+        delegate?.startLoading!()
+        articleModel?.update(article, success: {
+            self.delegate?.finishLoading!()
+            self.delegate?.setUpdateCompleted!()
+        }, error: {
+            self.delegate?.setUpdateFailed!()
+        })
     }
 }
 
-@objc protocol ArticleListPresenterDelegate:NSObjectProtocol {
-    
-    // start up application
-    @objc optional func setStartLoading()
-    @objc optional func setFinishLoading()
-    @objc optional func setEmptyView()
-    @objc optional func setArticleList(_ articles : Array<Article>)
-    @objc optional func reloadArticleListTable()
-    
-    // loading
-    @objc optional func startLoading()
-    @objc optional func finishLoading()
-    
-    // next page
-    @objc optional func updateArticleList(_ articles : Array<Article>)
-    
-    // Create
-    @objc optional func setCreateCompleted()
-    @objc optional func setCreateFailed()
-    
-    // Delete
-    @objc optional func setDeleteCompleted(_ index:Int)
-    @objc optional func setDeleteFailed(_ index:Int)
-    
-    // Upldate
-    @objc optional func setUpdateCompleted()
-    @objc optional func setUpdateFailed()
-}
+
