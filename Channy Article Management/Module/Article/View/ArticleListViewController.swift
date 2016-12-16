@@ -23,19 +23,17 @@ class ArticleListViewController: UITableViewController {
 
         navigationItem.title = "Article"
         
-        UploadImagesModel().uploads()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ArticleListViewController.addArticlePressed))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Upload", style: UIBarButtonItemStyle.plain, target: self, action: #selector(ArticleListViewController.uploadsPressed))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addArticlePressed))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        //make the empty view become full screen
+        emptyView = UIView(frame: UIScreen.main.bounds)
+        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: (emptyView?.frame.width)!/2,y: (emptyView?.frame.height)!/2, width: 15, height: 15))
         
-        // make the empty view become full screen
-        //emptyView = UIView(frame: UIScreen.main.bounds)
-        //activityIndicator = UIActivityIndicatorView(frame: CGRect(x: (emptyView?.frame.width)!/2,y: (emptyView?.frame.height)!/2, width: 15, height: 15))
+        emptyView!.backgroundColor = UIColor.brown
+        emptyView!.addSubview(activityIndicator!)
         
-        //emptyView!.backgroundColor = UIColor.brown
-        //emptyView!.addSubview(activityIndicator!)
-        
-        //self.view.addSubview(emptyView!)
+        self.view.addSubview(emptyView!)
        
     }
     
@@ -71,7 +69,8 @@ class ArticleListViewController: UITableViewController {
     }
     
     func uploadsPressed(_ sender : UIBarButtonItem) {
-        
+        let uploadImagesViewController = UploadImagesViewController(nibName: nil, bundle: nil)
+        navigationController?.pushViewController(uploadImagesViewController, animated: true)
     }
     
     
@@ -100,20 +99,17 @@ class ArticleListViewController: UITableViewController {
 extension ArticleListViewController : ArticlePresenterDelegate{
     
     func setStartLoading() {
-        // make activity spinning
-        //tableView.isHidden = false
-        //emptyView?.isHidden = false
-        //activityIndicator?.isHidden = false
-        //activityIndicator?.startAnimating()
-        print("Try to refresh")
-        self.tableView.refreshControl?.beginRefreshing()
+        emptyView?.isHidden = false
+        tableView.isHidden = false
+        activityIndicator?.isHidden = false
+        activityIndicator?.startAnimating()
     }
     
     func setFinishLoading() {
         self.refreshControl?.endRefreshing()
-        //tableView.isHidden = false
-        //emptyView?.isHidden = true
-        //activityIndicator?.stopAnimating()
+        tableView.isHidden = false
+        emptyView?.isHidden = true
+        activityIndicator?.stopAnimating()
     }
     
     func setArticleList(_ articles: Array<Article>) {
@@ -245,7 +241,3 @@ extension ArticleListViewController{
     }
 }
 
-extension ArticleListViewController{
-    
-   
-}

@@ -14,6 +14,8 @@
 		8885A50B1E0399BD00654A50 /* UploadImageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8885A5071E0399BD00654A50 /* UploadImageProtocol.swift */; };
 		8885A50E1E039A1900654A50 /* UploadConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8885A50D1E039A1900654A50 /* UploadConfiguration.swift */; };
 		8885A5101E039D8500654A50 /* UploadImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8885A50F1E039D8500654A50 /* UploadImagesViewController.swift */; };
+		8885A5141E03A68200654A50 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8885A5121E03A68200654A50 /* ImageCell.swift */; };
+		8885A5151E03A68200654A50 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8885A5131E03A68200654A50 /* ImageCell.xib */; };
 		B900B9EE1E00C40C001B1635 /* ArticleConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900B9ED1E00C40C001B1635 /* ArticleConfiguration.swift */; };
 		B9527FC91DFEF3E800A9FAA5 /* ArticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9527FC01DFEF3E800A9FAA5 /* ArticleModel.swift */; };
 		B9527FCA1DFEF3E800A9FAA5 /* ArticleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9527FC31DFEF3E800A9FAA5 /* ArticleDetailViewController.swift */; };
@@ -39,6 +41,8 @@
 		8885A5071E0399BD00654A50 /* UploadImageProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadImageProtocol.swift; sourceTree = "<group>"; };
 		8885A50D1E039A1900654A50 /* UploadConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadConfiguration.swift; sourceTree = "<group>"; };
 		8885A50F1E039D8500654A50 /* UploadImagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadImagesViewController.swift; sourceTree = "<group>"; };
+		8885A5121E03A68200654A50 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		8885A5131E03A68200654A50 /* ImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		B900B9ED1E00C40C001B1635 /* ArticleConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleConfiguration.swift; sourceTree = "<group>"; };
 		B936C7701DFEF301001BBF88 /* Channy Article Management.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Channy Article Management.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9527FC01DFEF3E800A9FAA5 /* ArticleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleModel.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 		8885A5081E0399BD00654A50 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8885A5111E03A65700654A50 /* XIB */,
 				8885A50F1E039D8500654A50 /* UploadImagesViewController.swift */,
 			);
 			path = View;
@@ -134,6 +139,15 @@
 				8885A50D1E039A1900654A50 /* UploadConfiguration.swift */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		8885A5111E03A65700654A50 /* XIB */ = {
+			isa = PBXGroup;
+			children = (
+				8885A5121E03A68200654A50 /* ImageCell.swift */,
+				8885A5131E03A68200654A50 /* ImageCell.xib */,
+			);
+			path = XIB;
 			sourceTree = "<group>";
 		};
 		B900B9E31E00BCC9001B1635 /* Support file */ = {
@@ -328,6 +342,7 @@
 				B9527FCD1DFEF3E800A9FAA5 /* Assets.xcassets in Resources */,
 				B9553F241DFFAEF60065A607 /* ArticleCell.xib in Resources */,
 				B9527FCE1DFEF3E800A9FAA5 /* Info.plist in Resources */,
+				8885A5151E03A68200654A50 /* ImageCell.xib in Resources */,
 				B9553F2B1DFFFB5F0065A607 /* LoadingPopup.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,6 +357,7 @@
 				B9527FCC1DFEF3E800A9FAA5 /* AppDelegate.swift in Sources */,
 				B9527FCA1DFEF3E800A9FAA5 /* ArticleDetailViewController.swift in Sources */,
 				8885A5101E039D8500654A50 /* UploadImagesViewController.swift in Sources */,
+				8885A5141E03A68200654A50 /* ImageCell.swift in Sources */,
 				B9527FCB1DFEF3E800A9FAA5 /* ArticleListViewController.swift in Sources */,
 				8816C6CC1E0276AE00958947 /* ImageToMultiPartFormData.swift in Sources */,
 				B95280011DFF040E00A9FAA5 /* ArticlePresenter.swift in Sources */,
