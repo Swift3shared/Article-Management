@@ -26,7 +26,7 @@ class ArticleCell: UITableViewCell {
         titleLabel.text = article.title
         descriptionLabel.text = article.articleDescription
         do {
-            let url = URL(string: article.image!)
+            let url = URL(string: article.image!) ?? URL(string : "http://120.136.24.174:1301/image-thumbnails/thumbnail-9350859e-6565-40f1-b5b3-7d1e0f859a73.jpg")
             let data = try Data(contentsOf: url!)
             articleImageView.image = UIImage(data: data)
         }catch {}

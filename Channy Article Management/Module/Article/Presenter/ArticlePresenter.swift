@@ -57,7 +57,6 @@ class ArticlePresenter {
                     self.delegate?.finishLoading!()
                     self.delegate?.updateArticleList!(articles)
                 }else{
-                    
                     self.delegate?.setFinishLoading!()
                     if articles.count > 0 {
                         self.delegate?.setArticleList!(articles)
