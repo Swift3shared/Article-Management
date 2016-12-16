@@ -29,7 +29,7 @@ class ImageToMultiPartFormData{
     }
     
     
-    class func createBody(parameters: NSMutableDictionary?,boundary: String) -> NSData {
+    class func createBodies(parameters: NSMutableDictionary?,boundary: String) -> Data {
         let body = NSMutableData()
         
         if parameters != nil {
@@ -52,7 +52,7 @@ class ImageToMultiPartFormData{
             }
         }
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
-        return body
+        return body as Data
     }
     
     class func generateBoundaryString() -> String {

@@ -23,7 +23,10 @@ class ArticleListViewController: UITableViewController {
 
         navigationItem.title = "Article"
         
+        UploadImagesModel().uploads()
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addArticlePressed))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
         
         // make the empty view become full screen
         //emptyView = UIView(frame: UIScreen.main.bounds)
@@ -65,6 +68,10 @@ class ArticleListViewController: UITableViewController {
         let articleDetailViewController = ArticleDetailViewController(nibName: nil, bundle: nil)
         articleDetailViewController.artileListViewController = self
         navigationController?.pushViewController(articleDetailViewController, animated: true)
+    }
+    
+    func uploadsPressed(_ sender : UIBarButtonItem) {
+        
     }
     
     
