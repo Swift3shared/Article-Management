@@ -28,6 +28,7 @@ class ArticleListViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         
@@ -38,7 +39,7 @@ class ArticleListViewController: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         
         self.refreshControl = UIRefreshControl(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 40))
-        
+        self.tableView.addSubview(self.refreshControl!)
     }
     
     func addArticlePressed(){
@@ -88,8 +89,8 @@ extension ArticleListViewController : ArticleDeletage {
     
     func setFinishRefresh() {
         DispatchQueue.main.async {
-            
             self.tableView.refreshControl?.endRefreshing()
+            self.refreshControl?.endRefreshing()
         }
     }
     
@@ -119,8 +120,16 @@ extension ArticleListViewController : ArticleDeletage {
         }
         
     }
+    
     func setDeleteFailed(_ index: Int) {
-        
+        self.messageAlter("Error", "This article cannot delete.")
+    }
+    
+    func messageAlter(_ title : String, _ message : String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
 }

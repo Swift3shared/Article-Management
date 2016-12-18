@@ -142,13 +142,6 @@
 			path = XIB;
 			sourceTree = "<group>";
 		};
-		B900B9E31E00BCC9001B1635 /* Support file */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Support file";
-			sourceTree = "<group>";
-		};
 		B900B9EC1E00C40C001B1635 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,7 +170,6 @@
 			isa = PBXGroup;
 			children = (
 				8816C6CA1E02765200958947 /* Utitlity */,
-				B900B9E31E00BCC9001B1635 /* Support file */,
 				B9527FBC1DFEF3E800A9FAA5 /* Entities */,
 				B9527FBD1DFEF3E800A9FAA5 /* Module */,
 				B9527FC51DFEF3E800A9FAA5 /* Resources */,
