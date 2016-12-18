@@ -14,13 +14,23 @@ class ArticleListViewController: UITableViewController {
     var articles:Array<Article> = []
     var articlePresenter:ArticlePresenter?
    
+//    /refreshControl: UIRefreshControl = {
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+//        return refreshControl
+//    }()
+    
+    
     override init(nibName name: String?, bundle: Bundle?) {
         super.init(nibName: name, bundle: bundle)
 
         navigationItem.title = "Article"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ArticleListViewController.addArticlePressed))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Upload", style: UIBarButtonItemStyle.plain, target: self, action: #selector(ArticleListViewController.uploadsPressed))
-       
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        self.tableView.addSubview(self.refreshControl!)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -36,10 +46,13 @@ class ArticleListViewController: UITableViewController {
         articlePresenter?.attachToDelegate = self
         articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
         
-        self.refreshControl?.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         
-        self.refreshControl = UIRefreshControl(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 40))
-        self.tableView.addSubview(self.refreshControl!)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if articles.count == 0, articlePresenter != nil{
+            articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
+        }
     }
     
     func addArticlePressed(){
@@ -61,8 +74,6 @@ class ArticleListViewController: UITableViewController {
             articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
         }
     }
-    
-    
     
     func updateArticle(atIndexParth indexPath: IndexPath, article : Article) {
         DispatchQueue.main.async {
@@ -88,10 +99,11 @@ extension ArticleListViewController : ArticleDeletage {
     }
     
     func setFinishRefresh() {
+        print("try stop spin")
         DispatchQueue.main.async {
-            self.tableView.refreshControl?.endRefreshing()
+            print("aSyn")
             self.refreshControl?.endRefreshing()
-        }
+        }        
     }
     
     
