@@ -13,27 +13,13 @@ class ArticleListViewController: UITableViewController {
     
     var articles:Array<Article> = []
     var articlePresenter:ArticlePresenter?
-    
-    // empty View and activity indicator
-    var emptyView:UIView?
-    var activityIndicator:UIActivityIndicatorView?
-    
+   
     override init(nibName name: String?, bundle: Bundle?) {
         super.init(nibName: name, bundle: bundle)
 
         navigationItem.title = "Article"
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ArticleListViewController.addArticlePressed))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Upload", style: UIBarButtonItemStyle.plain, target: self, action: #selector(ArticleListViewController.uploadsPressed))
-        
-        //make the empty view become full screen
-        emptyView = UIView(frame: UIScreen.main.bounds)
-        activityIndicator = UIActivityIndicatorView(frame: CGRect(x: (emptyView?.frame.width)!/2,y: (emptyView?.frame.height)!/2, width: 15, height: 15))
-        
-        emptyView!.backgroundColor = UIColor.brown
-        emptyView!.addSubview(activityIndicator!)
-        
-        self.view.addSubview(emptyView!)
        
     }
     
@@ -52,13 +38,6 @@ class ArticleListViewController: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         
         self.refreshControl = UIRefreshControl(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 40))
-        self.refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: UIControlEvents.valueChanged)
-        self.tableView.addSubview(self.refreshControl!)
-        
-        //self.tableView.tableFooterView.en
-        let uiView = UIView(frame:CGRect(x: 20, y: 0, width: 20, height: 50))
-        uiView.backgroundColor = UIColor.blue
-        self.tableView.tableFooterView?.addSubview(uiView)
         
     }
     
@@ -75,20 +54,21 @@ class ArticleListViewController: UITableViewController {
     
     
     func handleRefresh(_ refreshControl: UIRefreshControl) {
-        PAGE_NUMBER = 1
-        articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
+        if PAGE_NUMBER > 1 {
+            PAGE_NUMBER = 1
+            TOTALE_PAGE = 1
+            articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
+        }
     }
     
     
     
     func updateArticle(atIndexParth indexPath: IndexPath, article : Article) {
-        articles[indexPath.row].title = article.title
-        articles[indexPath.row].articleDescription = article.articleDescription
-        articles[indexPath.row].image = article.image
-        
-        self.tableView.reloadData()
-        
-        print("Updated ")
+        DispatchQueue.main.async {
+            self.articles.remove(at: indexPath.row)
+            self.articles.insert(article, at: indexPath.row)
+            self.tableView.reloadData()
+        }
     }
     
 }
@@ -96,22 +76,8 @@ class ArticleListViewController: UITableViewController {
 ////////////////////
 // DELEGAGE  ///////
 ////////////////////
-extension ArticleListViewController : ArticlePresenterDelegate{
-    
-    func setStartLoading() {
-        emptyView?.isHidden = false
-        tableView.isHidden = false
-        activityIndicator?.isHidden = false
-        activityIndicator?.startAnimating()
-    }
-    
-    func setFinishLoading() {
-        self.refreshControl?.endRefreshing()
-        tableView.isHidden = false
-        emptyView?.isHidden = true
-        activityIndicator?.stopAnimating()
-    }
-    
+extension ArticleListViewController : ArticleDeletage {
+       
     func setArticleList(_ articles: Array<Article>) {
         if articles.count > 0 {
             self.articles = []
@@ -120,18 +86,22 @@ extension ArticleListViewController : ArticlePresenterDelegate{
         tableView.reloadData()
     }
     
-    func setEmptyView() {
-        tableView.isHidden = true
-        emptyView?.isHidden = false
+    func setFinishRefresh() {
+        DispatchQueue.main.async {
+            
+            self.tableView.refreshControl?.endRefreshing()
+        }
     }
     
-    func reloadArticleListTable() {
-        tableView.reloadData()
-    }
+    
     /** Create     **/
     func setCreateCompleted(_ article: Article) {
-        self.articles.insert(article, at: 0)
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.articles.insert(article, at: 0)
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .left)
+            self.tableView.reloadData()
+        }
     }
     
     /** pagination **/
@@ -141,26 +111,18 @@ extension ArticleListViewController : ArticlePresenterDelegate{
         tableView.reloadData()
     }
     
-    /** delete **/
-    func setDeleteFailed(_ index:Int) {
-        
-    }
-    
     func setDeleteCompleted(atIndexPath indextPath : IndexPath) {
-       print(indextPath.row)
-       articles.remove(at: indextPath.row)
-        //self.tableView.deleteRows(at: [indextPath], with: .fade)
-        self.tableView.reloadData()
+        print(indextPath.row)
+        DispatchQueue.main.async{
+            self.articles.remove(at: indextPath.row)
+            self.tableView.deleteRows(at: [indextPath], with: .left)
+        }
+        
     }
-    
-    // loading
-    func startLoading() {
+    func setDeleteFailed(_ index: Int) {
         
     }
     
-    func finishLoading() {
-        
-    }
 }
 
 
@@ -177,20 +139,25 @@ extension ArticleListViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = Bundle.main.loadNibNamed("ArticleCell", owner: self, options: nil)?.first as! ArticleCell        
-        cell.configuration(articles[indexPath.row])
+        let cell = Bundle.main.loadNibNamed("ArticleCell", owner: self, options: nil)?.first as! ArticleCell
+        DispatchQueue.main.async {            
+            cell.configuration(self.articles[indexPath.row])
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row >= articles.count - 1 {
-           // articlePresenter?.getArticle(PAGE_NUMBER , NUMBER_OF_REROCE)
+        DispatchQueue.main.async {
+            if indexPath.row >= self.articles.count - 1 {
+                if PAGE_NUMBER < TOTALE_PAGE {
+                    PAGE_NUMBER = PAGE_NUMBER + 1
+                    print(PAGE_NUMBER)
+                    self.articlePresenter?.getArticle(PAGE_NUMBER , NUMBER_OF_REROCE)
+                }
+            }
         }
     }
-    
-    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        print("Footer")
-    }
+
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let cell = Bundle.main.loadNibNamed("ArticleCell", owner: self, options: nil)?.first as! ArticleCell
@@ -204,40 +171,20 @@ extension ArticleListViewController{
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Delete", handler:{
             action, indexpath in
-            self.articlePresenter?.deleteArticle(aritcleId: self.articles[indexPath.row].id!, atIndexPath: indexPath)
+            self.articlePresenter?.deleteArticle(self.articles[indexPath.row].id!, atIndexPath: indexPath)
         });
-        let EditRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Edit", handler:{
+        let editRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Edit", handler:{
             action, indexpath in
-            
             let articleDetailViewController = ArticleDetailViewController(nibName: nil, bundle: nil)
             articleDetailViewController.articleToUpdate = self.articles[indexPath.row]
-            
             articleDetailViewController.artileListViewController = self
-            
             articleDetailViewController.indexPathToUpdate = indexPath
-            
             _ = self.navigationController?.pushViewController( articleDetailViewController, animated: true)
-            
         });
-        deleteRowAction.backgroundColor = UIColor.brown
-        return [deleteRowAction,EditRowAction]
+        deleteRowAction.backgroundColor = UIColor.red
+        editRowAction.backgroundColor = UIColor.green
+        return [deleteRowAction,editRowAction]
     }
-    
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        print("Footer add")
-        print(section)
-        if section == 1{
-            print("Sec 1")
-            let tableViewHeader = UITableViewHeaderFooterView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 40))
-            tableViewHeader.backgroundColor = UIColor.blue
-            
-            return tableViewHeader
-        }
-        return nil
-    }
-    
-    override func tableView( _ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 50.0
-    }
+
 }
 

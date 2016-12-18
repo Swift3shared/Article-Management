@@ -18,7 +18,11 @@ func uploadsHeaderFields(_ boundary : String) -> [String : String] {
     ]
 }
 
+
 //////////////////////
 // URL              //
 //////////////////////
 let URL_UPLOADS = "http://120.136.24.174:15020/v1/api/admin/upload/multiple"
+
+typealias UploadSuccessHandler = () -> ()
+typealias UploadErrorHandler = () -> ()

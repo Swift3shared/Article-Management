@@ -8,37 +8,59 @@
 
 import UIKit
 
-class UploadImagesModel{
-    func uploads(){
+class UploadImagesModel : NSObject{
+    
+    var session : URLSession!
+    
+    var uploadModelDelegate : UploadModelDelegate!
+    
+    override init() {
+        super.init()
+        let config = URLSessionConfiguration.default
+        session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
+    }
+    
+    func attachDelegate(_ uploadModelDelegate : UploadModelDelegate) {
+        self.uploadModelDelegate = uploadModelDelegate
+    }
+    
+    func uploads(_ restaurantName : String, _ imags : [UIImage]){
         
         let url = URL(string: URL_UPLOADS)
-        var request = URLRequest(url:url!)
+        var request = URLRequest(url : url!)
         let boundary = ImageToMultiPartFormData.generateBoundaryString()
-        
-        request.allHTTPHeaderFields = uploadsHeaderFields(boundary)
         request.httpMethod = "POST"
-        
-        //let body = createBody(parameters: , boundary: boundary) as Data
-        
-        let body = ImageToMultiPartFormData.createBodies(parameters: ["name":"Sok Shop","files":[#imageLiteral(resourceName: "testImage"),#imageLiteral(resourceName: "thumnail")]], boundary: boundary)
-        
-        let session = URLSession.shared
-        
-        print("Reach 1")
+        request.allHTTPHeaderFields = uploadsHeaderFields(boundary)
+        let body = ImageToMultiPartFormData.createBodies(parameters: ["name": restaurantName, "files": imags], boundary: boundary)
         
         session.uploadTask(with: request as URLRequest, from : body){
-            data, response, error in
-            print("Reach 2")
-            
-            print(response ?? "NO response")
-            if data != nil {
-                let dataJson = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments)
-                print(dataJson)
+            data, response, err in
+                        
+            if data != nil {                                
+                DispatchQueue.main.async {
+                    self.uploadModelDelegate.setUploadsCompleted()
+                }
             }
             
-            if error != nil {
-                print(error ?? "NO response")
+            if err != nil {
+                DispatchQueue.main.async {
+                    self.uploadModelDelegate.setUploadsFailed()
+                }
             }
-            }.resume()
+        }.resume()
+    }
+}
+
+extension UploadImagesModel : URLSessionTaskDelegate{
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        
+        let byte = ByteCountFormatter.string(fromByteCount: totalBytesSent, countStyle: .binary)
+        let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToSend, countStyle: .binary)        
+        let display = String.init(format: "Upload %@ of %@", byte, totalSize)
+        
+        DispatchQueue.main.async {
+            self.uploadModelDelegate.setUploadProgress(display)
+        }
     }
 }

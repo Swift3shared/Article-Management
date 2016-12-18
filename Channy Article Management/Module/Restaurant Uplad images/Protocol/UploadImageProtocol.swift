@@ -8,9 +8,14 @@
 
 import Foundation
 
-protocol UploadImagesPresterDelegate {
-    func setStartUploads()
-    func setFinishUploads()
-    func setUploadsCompleted(_ urls : [String])
+protocol UploadImagesPresterDelegate {  
+    func setUploadProgress(_ message : String)
+    func setUploadsCompleted()
+    func setUploadsFailed(_ title : String, _ message : String)
+}
+
+protocol UploadModelDelegate {
+    func setUploadProgress(_ message : String)
+    func setUploadsCompleted()
     func setUploadsFailed()
 }

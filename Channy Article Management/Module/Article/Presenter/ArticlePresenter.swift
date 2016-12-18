@@ -10,14 +10,14 @@ import UIKit
 
 class ArticlePresenter {
     
-    weak fileprivate var delegate:ArticlePresenterDelegate?
-    fileprivate var articleModel:ArticleModel?
+    weak fileprivate var delegate : ArticleDeletage?
+    fileprivate var articleModel : ArticleModel?
     
     init() {
         articleModel = ArticleModel()
     }
     
-    var attachToDelegate:ArticlePresenterDelegate? = nil{
+    var attachToDelegate : ArticleDeletage? = nil{
         didSet{
             delegate = attachToDelegate
         }
@@ -27,42 +27,44 @@ class ArticlePresenter {
     //   Create     ///
     ///////////////////
     func create(_ article : Article, _ image : UIImage ) {
-        delegate?.startLoading!()
-        articleModel?.create(article, image, success: {
-            self.delegate?.finishLoading!()
-            self.delegate?.setCreateCompleted!(article)
+     
+        if article.title == "" {
+            delegate?.setCreateFailed!("Missed", "Article title is required.")
+            return
+        }
+        
+        if article.description == "" {
+            delegate?.setCreateFailed!("Missed", "Article description is required.")
+            return
+        }
+        
+        
+        if image == #imageLiteral(resourceName: "thumbnail"){
+            delegate?.setCreateFailed!("Missed", "Article image is required.")
+            return
+        }
+        articleModel?.create(article, image, success: { data in
+            self.delegate?.setCreateCompleted!(data)
         }, error: {
-            self.delegate?.finishLoading!()
-            self.delegate?.setCreateFailed!()
+            self.delegate?.setCreateFailed!("Error", "Create new article is failed.")
         })
     }
     
     ///////////////////
     // Get Article  ///
     ///////////////////
-    func getArticle(_ page:Int,_ numberOfRow:Int){
-        
-        if page > 1 {
-            self.delegate?.startLoading!()
-        }
-        else{
-            self.delegate?.setStartLoading!()
-        }
-        
+    func getArticle(_ page : Int,_ numberOfRow:Int){
         articleModel?.getArticle(page, numberOfRow, completionHandler: {
             data in
             if let articles = data{
-                // if page bigger than 0 and number of array more that 0 need update array else set use array
                 if page > 1 {
-                    self.delegate?.finishLoading!()
-                    self.delegate?.updateArticleList!(articles)
-                }else{
-                    self.delegate?.setFinishLoading!()
-                    if articles.count > 0 {
-                        self.delegate?.setArticleList!(articles)
+                    DispatchQueue.main.async {
+                        self.delegate?.updateArticleList!(articles)
                     }
-                    else{
-                        self.delegate?.setEmptyView!()
+                }else{
+                    DispatchQueue.main.async {
+                        self.delegate?.setFinishRefresh!()
+                        self.delegate?.setArticleList!(articles)
                     }
                 }
             }
@@ -73,13 +75,11 @@ class ArticlePresenter {
     /// Delete   ////
     ///////////////
     /////////////////
-    func deleteArticle(aritcleId:Int, atIndexPath indextPath : IndexPath) {
-        delegate?.startLoading!()
-        articleModel?.delete(aritcleId, success: {
-            self.delegate?.finishLoading!()
-            self.delegate?.setDeleteCompleted!(atIndexPath: indextPath)
+    func deleteArticle(_ artitcleId : Int, atIndexPath indextPath : IndexPath) {
+
+        articleModel?.delete(artitcleId, success: {
+            self.delegate?.setDeleteCompleted!(atIndexPath: indextPath)            
         }, error: {
-            self.delegate?.finishLoading!()
             self.delegate?.setDeleteFailed!(indextPath.row)
         })
     }
@@ -88,14 +88,23 @@ class ArticlePresenter {
     /// Update //////
     /////////////////
     
-    func update(_ article:Article) {
+    func update(_ article:Article, _ image : UIImage = #imageLiteral(resourceName: "thumbnail")) {
+
+        if article.title == "" {
+            delegate?.setUpdateFailed!("Missed", "Article title is required.")
+            return
+        }
         
-        delegate?.startLoading!()
-        articleModel?.update(article, success: {
-            self.delegate?.finishLoading!()
+        if article.description == "" {
+            delegate?.setUpdateFailed!("Missed", "Article description is required.")
+            return
+        }
+        
+        articleModel?.update(article, image, success: {
+            print("Presenter update ")
             self.delegate?.setUpdateCompleted!(article)
         }, error: {
-            self.delegate?.setUpdateFailed!()
+            self.delegate?.setUpdateFailed!("Error", "This article cannot be update.")
         })
     }
 }

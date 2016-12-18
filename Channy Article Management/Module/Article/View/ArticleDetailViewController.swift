@@ -8,14 +8,14 @@
 
 import UIKit
 
-class ArticleDetailViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class ArticleDetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
-    var imagePicker:UIImagePickerController?
+    var imagePicker:UIImagePickerController!
     
-    var titleTextField : UITextField?
-    var descriptionTextView : UITextView?
-    var galaryButton : UIButton?
-    var articleImage : UIImageView?
+    var titleTextField : UITextField!
+    var descriptionTextView : UITextView!
+    var galaryButton : UIButton!
+    var articleImage : UIImageView!
     var imagView : UIImage!
     
     var articleToUpdate : Article?
@@ -27,7 +27,6 @@ class ArticleDetailViewController: UIViewController, UINavigationControllerDeleg
 
     override init(nibName name: String?, bundle: Bundle?) {
         super.init(nibName: name, bundle: bundle)
-        navigationItem.title = "New Article"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed(_:)))
     }
     
@@ -43,7 +42,7 @@ class ArticleDetailViewController: UIViewController, UINavigationControllerDeleg
         articlePresenter?.attachToDelegate = self
         
         imagePicker = UIImagePickerController()
-        imagePicker?.delegate = self
+        imagePicker.delegate = self
         
     }
 
@@ -53,21 +52,30 @@ class ArticleDetailViewController: UIViewController, UINavigationControllerDeleg
     
     func doneButtonPressed(_ sender : UIButton){
         if articleToUpdate == nil {
-            let article = Article(id: 0, title: (titleTextField?.text!)!, description: (descriptionTextView?.text!)!, image: "Not avaliable")
-            articlePresenter?.create(article, imagView)
+            let article = Article(id: 0, title: titleTextField.text!, description: descriptionTextView.text!, image: "Not avaliable")
+            if  self.imagView != nil {
+                self.articlePresenter!.create(article, self.imagView)
+            }
+            else {
+                self.messageAlter("Missed", "Please select an image.")
+            }
+            
         } else {
-            self.articleToUpdate?.title = titleTextField?.text!
-            self.articleToUpdate?.articleDescription = descriptionTextView?.text!
-            self.articlePresenter?.update(self.articleToUpdate!)
+            self.articleToUpdate!.title = self.titleTextField.text!
+            self.articleToUpdate!.articleDescription = self.descriptionTextView.text!
+            if self.imagView != nil{
+                self.articlePresenter!.update(self.articleToUpdate!, self.imagView)
+            }else {
+                self.articlePresenter!.update(self.articleToUpdate!)
+            }            
         }
         
     }
     
-    func openGallary()
-    {
-        imagePicker?.allowsEditing = false
-        imagePicker?.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        present(imagePicker!, animated: true, completion: nil)
+    func openGallary() {
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        present(imagePicker, animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -76,38 +84,52 @@ class ArticleDetailViewController: UIViewController, UINavigationControllerDeleg
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
-        if let img = info[UIImagePickerControllerOriginalImage] as? UIImage{
-            print("reac")
-            self.imagView = img
-            self.articleImage!.image = self.imagView
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+            DispatchQueue.main.async {
+                self.articleImage.image = image
+                self.imagView = image
+            }
+        } else if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            DispatchQueue.main.async {
+                self.articleImage.image = image
+                self.imagView = image
+            }
+        } else {
+            articleImage.image = nil
         }
-        imagePicker?.dismiss(animated: true, completion: nil)
+        imagePicker.dismiss(animated: true, completion: nil)
     }
 }
 
 ////////////////////////////////////
 // Delegate                     ////
 ////////////////////////////////////
-extension ArticleDetailViewController : ArticlePresenterDelegate {
-    
-    func startLoading() {
-        print("Start Create")
-    }
-    
-    func finishLoading() {
-        print("Finish Create")
-    }
+extension ArticleDetailViewController : ArticleDeletage {
     
     func setCreateCompleted(_ article:Article) {
         self.artileListViewController?.setCreateCompleted(article)
+        self.messageAlter("Success", "Article is been create.")
     }
     
-    func setCreateFailed() {
-        print("Create failed")
+    
+    func setCreateFailed(_ title : String, _ message : String) {
+        self.messageAlter(title, message)
     }
     
     func setUpdateCompleted(_ article: Article) {
-        self.artileListViewController?.updateArticle(atIndexParth: indexPathToUpdate!, article: article)
+        self.messageAlter("Success", "Article is been update.")
+        self.artileListViewController?.updateArticle(atIndexParth: self.indexPathToUpdate!, article: article)
+    }
+    
+    func setUpdateFailed(_ title : String, _ message : String) {
+        messageAlter(title, message)        
+    }
+    
+    func messageAlter(_ title : String, _ message : String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
 }
@@ -119,45 +141,48 @@ extension ArticleDetailViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         
-        let screenHieght = UIScreen.main.bounds.height
-        let screenWidth = UIScreen.main.bounds.width
+        let screenHieght = self.view.bounds.height
+        let screenWidth = self.view.bounds.width
         
-        articleImage = UIImageView(frame : CGRect(x: 20, y: 80, width: screenWidth - 40 , height: screenHieght / 2 - 100 ))
+        self.galaryButton = UIButton(frame : CGRect(x: 20, y: 100, width: screenWidth - 40 , height: screenHieght / 2 - 100 ))
+        self.articleImage = UIImageView(frame: self.galaryButton.bounds)
+        self.galaryButton.layer.borderWidth = 2
+        self.galaryButton.addSubview(self.articleImage)
+        self.galaryButton.addTarget(self, action: #selector(openGallary), for: .touchDown)
         
+        self.titleTextField = UITextField(frame: CGRect(x: 20, y: screenHieght / 2 + 10 , width: screenWidth - 40, height: 35))
+        self.titleTextField.layer.borderWidth = 1
+        self.titleTextField.placeholder = "Article title"
         
-        titleTextField = ArticleUITextField(frame: CGRect(x: 20, y: screenHieght / 2 + 10 , width: screenWidth - 40, height: 40), "Title")
+        self.descriptionTextView = UITextView(frame: CGRect(x: 20, y: screenHieght / 2 + 70, width: screenWidth - 40, height: 70))
         
-        descriptionTextView = ArticleUITextView(frame: CGRect(x: 20, y: screenHieght / 2 + 70, width: screenWidth - 40, height: 70))
+        self.descriptionTextView.text = "Description"
+        self.descriptionTextView.textColor = UIColor.black
+        self.descriptionTextView.layer.borderWidth = 1
         
-        descriptionTextView?.text = "Description"
-        descriptionTextView?.textColor = UIColor.lightGray
+        self.titleTextField.delegate = self
+        self.descriptionTextView.delegate = self
         
-        galaryButton = UIButton(frame : CGRect(x: (screenWidth / 2) - 50, y: screenHieght - 100 , width: 100, height: 50))
-        galaryButton?.titleLabel?.text = "Save"
-        galaryButton?.titleLabel?.textColor = UIColor.blue
-        galaryButton?.layer.borderWidth = 1
-        galaryButton?.layer.borderColor = UIColor.blue.cgColor
-        
-        titleTextField?.delegate = self
-        descriptionTextView?.delegate = self
-        
-        self.view.addSubview(articleImage!)
-        self.view.addSubview(galaryButton!)
-        self.view.addSubview(titleTextField!)
-        self.view.addSubview(descriptionTextView!)
+        self.view.addSubview(galaryButton)
+        self.view.addSubview(titleTextField)
+        self.view.addSubview(descriptionTextView)
         
         if articleToUpdate != nil {
-            titleTextField?.text = articleToUpdate?.title
-            descriptionTextView?.text = articleToUpdate?.articleDescription
+            
+            navigationItem.title = "Update"
+            DispatchQueue.main.async {
+            self.titleTextField?.text = self.articleToUpdate?.title
+            self.descriptionTextView?.text = self.articleToUpdate?.articleDescription
             
             do {
-                let url = URL(string: (articleToUpdate?.image)!)
+                let url = URL(string: (self.articleToUpdate?.image)!) ?? URL(string : "http://120.136.24.174:1301/image-thumbnails/thumbnail-9350859e-6565-40f1-b5b3-7d1e0f859a73.jpg")
                 let data = try Data(contentsOf: url!)
-                articleImage?.image = UIImage(data: data)
+                self.articleImage.image = UIImage(data: data)
             }catch {}
+            }
+        }else {
+            navigationItem.title = "New Article"
         }
-        
-        galaryButton?.addTarget(self, action: #selector(openGallary), for: .touchDown)
     }
 }
 
@@ -176,11 +201,13 @@ extension ArticleDetailViewController : UITextViewDelegate, UITextFieldDelegate 
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        textView.text = ""
+        if textView.text == "Description" {
+            textView.text = ""
+        }
     }
     
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        if textView.text == "" {
+        if textView.text == ""  {
             textView.text = "Description"
             textView.resignFirstResponder()
             return false

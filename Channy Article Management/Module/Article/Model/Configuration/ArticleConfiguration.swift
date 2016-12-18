@@ -54,8 +54,10 @@ let URL_UPLOAD_SINGLE_IMAGE = "http://120.136.24.174:1301/v1/api/uploadfile/sing
 //////////////////////////
 typealias CompletionHandler = (Array<Article>?) -> ()
 typealias SuccessHandler = () -> ()
+typealias SuccessCreateHandler = (_ article : Article) -> ()
 typealias SuccessHandlerWithString = (String) -> ()
 typealias ErrorHandler = () -> ()
+
 
 
 //////////////////////////
@@ -63,6 +65,7 @@ typealias ErrorHandler = () -> ()
 //////////////////////////
 
 func createArticleParamater(_ article : Article) -> AnyObject {
+    //print(article.title)
     return [
         "TITLE": "\(article.title!)",
         "DESCRIPTION": "\(article.articleDescription!)",

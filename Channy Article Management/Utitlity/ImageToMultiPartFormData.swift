@@ -30,6 +30,7 @@ class ImageToMultiPartFormData{
     
     
     class func createBodies(parameters: NSMutableDictionary?,boundary: String) -> Data {
+        
         let body = NSMutableData()
         
         if parameters != nil {
@@ -45,19 +46,31 @@ class ImageToMultiPartFormData{
                     var i = 0;
                     for image in value as! [UIImage]{
                         let filename = "image\(i).jpg"
-                        body.append(getBody( key as! String, filename, image, boundary))
+                        let data = UIImageJPEGRepresentation(image,1);
+                        
+                        let mimetype = "image/jpg"
+                        
+                        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+                        body.append("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(filename)\"\r\n".data(using: .utf8)!)
+                        body.append("Content-Type: \(mimetype)\r\n\r\n".data(using: .utf8)!)
+                        body.append(data!)
+                        body.append("\r\n".data(using: .utf8)!)
                         i = i + 1;
                     }
+                    
+                    
                 }
             }
         }
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
-        return body as Data
+        return body  as Data
     }
     
     class func generateBoundaryString() -> String {
         return "Boundary-\(NSUUID().uuidString)"
     }
+    
+    
 
     
 }
