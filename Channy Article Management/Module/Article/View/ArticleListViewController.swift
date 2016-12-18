@@ -13,13 +13,6 @@ class ArticleListViewController: UITableViewController {
     
     var articles:Array<Article> = []
     var articlePresenter:ArticlePresenter?
-   
-//    /refreshControl: UIRefreshControl = {
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
-//        return refreshControl
-//    }()
-    
     
     override init(nibName name: String?, bundle: Bundle?) {
         super.init(nibName: name, bundle: bundle)
@@ -30,7 +23,7 @@ class ArticleListViewController: UITableViewController {
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(ArticleListViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
-        self.tableView.addSubview(self.refreshControl!)
+        self.tableView.refreshControl = self.refreshControl
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -68,10 +61,13 @@ class ArticleListViewController: UITableViewController {
     
     
     func handleRefresh(_ refreshControl: UIRefreshControl) {
+        print("Refresh")
         if PAGE_NUMBER > 1 {
             PAGE_NUMBER = 1
             TOTALE_PAGE = 1
             articlePresenter?.getArticle(PAGE_NUMBER, NUMBER_OF_REROCE)
+        }else{
+            refreshControl.endRefreshing()
         }
     }
     
@@ -103,7 +99,7 @@ extension ArticleListViewController : ArticleDeletage {
         DispatchQueue.main.async {
             print("aSyn")
             self.refreshControl?.endRefreshing()
-        }        
+        }
     }
     
     

@@ -6,7 +6,7 @@
 //  Copyright © 2016 channy-origin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 @objc protocol ArticleDeletage :  NSObjectProtocol {
     

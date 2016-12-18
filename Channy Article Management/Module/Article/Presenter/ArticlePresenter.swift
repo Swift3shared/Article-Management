@@ -63,7 +63,9 @@ class ArticlePresenter {
                     }
                 }else{
                     DispatchQueue.main.async {
-                        self.delegate?.setFinishRefresh!()
+                        //if refreshControl != nil {
+                             self.delegate?.setFinishRefresh!()
+                        //}
                         self.delegate?.setArticleList!(articles)
                     }
                 }
